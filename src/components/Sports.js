@@ -14,10 +14,16 @@ const Sports = () => {
   const [time1, settime1] = useState(60)
   const fetchData = async () => {
     const res = await fetch('https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple');
-    const data = await res.json();
-    await setdata1(data.results)
-    console.log(data1)
-    setquestion(data.results[0])
+    if(res.ok){
+      const data = await res.json();
+      await setdata1(data.results)
+      if (data && data.results && data.results.length > 0) {
+        setquestion(data.results[0]);
+      } else {
+        // Handle the case where data or data.results is undefined or empty
+        console.log("No results found or data is undefined");
+      }
+    }
 
   }
   const stylee = {

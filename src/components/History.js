@@ -14,10 +14,18 @@ const History = () => {
   const [time1, settime1] = useState(60)
   const fetchData = async () => {
     const res = await fetch('https://opentdb.com/api.php?amount=10&category=23&difficulty=easy&type=multiple');
-    const data = await res.json();
-    await setdata1(data.results)
-    console.log(data1)
-    setquestion(data.results[0])
+    if(res.ok){
+      const data = await res.json();
+      await setdata1(data.results)
+      if (data && data.results && data.results.length > 0) {
+        setquestion(data.results[0]);
+      } else {
+        // Handle the case where data or data.results is undefined or empty
+        console.log("No results found or data is undefined");
+      }
+    }
+ 
+
 
   }
   const stylee = {
@@ -36,6 +44,7 @@ const History = () => {
   }
 
   const handleClick = () => {
+    console.log(data1)
 
     if (questionno > 8) {
       localStorage.setItem('right' , right); 
@@ -43,10 +52,15 @@ const History = () => {
       
     }
     else {
-      setquestion(data1[questionno + 1])
-      setquestionno(questionno + 1)
-      setdisable1(true)
-      setmessage('')
+      if (data1 && data1.length > questionno + 1) {
+        setquestion(data1[questionno + 1])
+        setquestionno(questionno + 1)
+        setdisable1(true)
+        setmessage('')
+      } else {
+        // Handle the case where data1 is undefined or there are no more questions
+        console.log("No more questions available or data1 is undefined");
+      }
     }
   }
   let  time2 = 60 ; 
